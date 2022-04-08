@@ -1,7 +1,7 @@
 import numpy as np
 from typing import List
 import matplotlib.pyplot as plt 
-from matplotlib.widgets import Slider, Button, RadioButtons
+from mpl_toolkits.mplot3d import Axes3D
 
 class Knot:
     """Base knot class
