@@ -2,6 +2,9 @@ import numpy as np
 from typing import List
 import matplotlib.pyplot as plt 
 from mpl_toolkits.mplot3d import Axes3D
+import plotly.express as px
+import plotly.graph_objects as go
+import pandas as pd
 
 class Knot:
     """Base knot class
@@ -40,6 +43,22 @@ class Knot:
             plt.savefig(str(self.name) + "_knot.png")
 
         plt.show()
+        return
+
+    def visualise(self):
+        """Visualises the knot coordinates using a 3D interactive plot
+        
+        :param save_image (bool): a flag indicating (if True) to save the generated 3D visualisation 
+        """        
+        x = self.coordinates[:, 0]
+        y = self.coordinates[:, 1]
+        z = self.coordinates[:, 2]
+
+        #fig = px.line_3d(self.coo)
+        fig = go.Figure(data=[go.Scatter3d(x=x, y=y, z=z, mode='markers')], x='X axis', y='Y axis', z='Z axis')
+        
+        fig.show()
+  
         return
 
     def save_coordinates(self, title: str = None, suffix: str = "dat"):
