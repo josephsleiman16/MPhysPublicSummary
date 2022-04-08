@@ -55,7 +55,7 @@ class Knot:
         z = self.coordinates[:, 2]
 
         #fig = px.line_3d(self.coo)
-        fig = go.Figure(data=[go.Scatter3d(x=x, y=y, z=z, mode='markers')])#, x='X axis', y='Y axis', z='Z axis')
+        fig = go.Figure(data=[go.Scatter3d(x=x, y=y, z=z, mode='markers')])
         
         fig.show()
   
