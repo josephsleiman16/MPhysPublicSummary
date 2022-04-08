@@ -1,6 +1,7 @@
 import numpy as np
 from typing import List
 import matplotlib.pyplot as plt 
+from matplotlib.widgets import Slider, Button, RadioButtons
 
 class Knot:
     """Base knot class
@@ -37,25 +38,6 @@ class Knot:
 
         if save_image:
             plt.savefig(str(self.name) + "_knot.png")
-
-        plt.show()
-        return
-
-    def visualise(self):
-        """Visualises the knot coordinates using a 3D plot
-        """
-        fig = plt.figure(figsize = (6, 5))
-        ax = plt.axes(projection = "3d")
-        
-        x = self.coordinates[:, 0]
-        y = self.coordinates[:, 1]
-        z = self.coordinates[:, 2]
-
-        ax.plot3D(x, y, z)
-        ax.text2D(0.15, 0.85, str(self.name), transform = ax.transAxes)
-        ax.set_xlabel('X axis')
-        ax.set_ylabel('Y axis')
-        ax.set_zlabel('Z axis')
 
         plt.show()
         return
