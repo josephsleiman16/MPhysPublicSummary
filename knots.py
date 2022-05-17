@@ -129,7 +129,7 @@ class Torus(Knot):
 class Lissajous(Knot):
     """Class to generate Lissajous knots
     """
-    def __init__(self, N: int = 100, n: List[int], phi: List[int]):
+    def __init__(self, n: List[int], phi: List[int], N: int = 100):
         """Constructor of the Lissajous knot class
 
         Initialises the n integer and phi phase-shift values defining a Lissajous knot
