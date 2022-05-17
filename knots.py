@@ -81,29 +81,32 @@ class Knot:
 class Torus(Knot):
     """Class to generate Torus knots
     """
-    def __init__(self, p: int = 3, q: int = 2):
+    def __init__(self, p: int = 3, q: int = 2, N: int = 100):
         """Constructor of the Torus knot class
 
-        Initialises the p and q integer values defining a Torus knot
+        Initialises the p and q integer values defining a Torus knot, as well as the number of coordinates to generate
 
         :param p (int): p-integer denoting the number of times the knot crosses the longitudinal direction (through the "hole")
         :param q (int): q-integer denoting the number of times the knot crosses the meridonial direction (revolutions)
+        :param N (int): the number of coordinates to generate
+
         """
-        Knot.__init__(self, name="(" + str(p) + "-" + str(q) + ") Torus")
+        Knot.__init__(self, name="(" + str(p) + "-" + str(q) + ")-Torus." + str(N))
         self.p = p
         self.q = q
+        self.N = N
 
 
-    def generate_coordinates(self, N: int = 100, r_inner: float = None, r_outer: float = None) -> np.ndarray:
+    def generate_coordinates(self, r_inner: float = None, r_outer: float = None) -> np.ndarray:
         """Generates the coordiantes of a (p-q) torus knot
 
-        :param N (int): the number of coordinates to generate
         :param r_inner (float): controls radius of inner circle of torus
         :param r_outer (float): controls radius of outer circle of torus
 
         :return self.coordinates (np.ndarray) a 3D array containing the Cartesian coordinates of the generated torus knot
         """
-        self.coordinates = np.empty((N, 3))
+        
+        self.coordinates = np.empty((self.N, 3))
         if r_inner is None:
             r_inner = 2
 
@@ -111,8 +114,8 @@ class Torus(Knot):
             r_outer = 1
 
 
-        for bead in range(N):
-            t = 2 * np.pi * bead / N
+        for bead in range(self.N):
+            t = 2 * np.pi * bead / self.N
             r = np.cos(self.q*t) + r_inner
 
             self.coordinates[bead][0] = r_outer * (r * np.cos(self.p*t))
@@ -126,32 +129,34 @@ class Torus(Knot):
 class Lissajous(Knot):
     """Class to generate Lissajous knots
     """
-    def __init__(self, n: List[int], phi: List[int]):
+    def __init__(self, N: int = 100, n: List[int], phi: List[int]):
         """Constructor of the Lissajous knot class
 
         Initialises the n integer and phi phase-shift values defining a Lissajous knot
 
         :param n List(int): a list of integers defining the n_x, n_y, and n_z Lissajous integers
         :param phi List(int): a list of integers defining the phi_x, phi_y, and phi_z Lissajous phase-shifts
+        :param N (int): the number of coordinates to generate
+
         """
-        Knot.__init__(self, name="Lissajous")
+        Knot.__init__(self, name="Lissajous." + str(N))
         self.n = n
         self.phi = phi
+        self.N = N
 
 
-    def generate_coordinates(self, N: int = 100, r_outer: float = None):
+    def generate_coordinates(self, r_outer: float = None):
         """Generates the coordiantes of a Lissajous knot
 
-        :param N (int): the number of coordinates to generate
         :param r_outer (float): controls amplitude of Lissajous knot
         """
-        self.coordinates = np.empty((N, 3))
+        self.coordinates = np.empty((self.N, 3))
 
         if r_outer is None:
             r_outer = 2
 
-        for bead in range(N):
-            t = 2 * np.pi * bead / N
+        for bead in range(self.N):
+            t = 2 * np.pi * bead / self.N
 
             for dimension in range(3):
                 self.coordinates[bead][dimension] = r_outer * np.cos(self.n[dimension]*t + self.phi[dimension])
@@ -162,22 +167,24 @@ class Lissajous(Knot):
 class Special(Knot):
     """Class to generate Special knots (4_1, granny)
     """
-    def __init__(self, id: int):
+    def __init__(self, id: int, N: int = 100):
         """Constructor of Special knots
         
         :param id (int): integer id to specify which type of knot is being generated
-        """
-        Knot.__init__(self, name="Figure-eight" if id == 0 else "Granny")
-        self.id = id
+        :param N (int): the number of coordinates to generate
 
-    def generate_coordinates(self, N: int = 100, r_inner: float = None, r_outer: float = None):
+        """
+        Knot.__init__(self, name="Figure-eight." + str(N) if id == 0 else "Granny." + str(N))
+        self.id = id
+        self.N = N
+
+    def generate_coordinates(self, r_inner: float = None, r_outer: float = None):
         """
         
-        :param N (int): the number of coordinates to generate
         :param r_inner (float): controls radius of inner circle of torus
         :param r_outer (float): controls radius of outer circle of torus
         """
-        self.coordinates = np.empty((N, 3))
+        self.coordinates = np.empty((self.N, 3))
         
         # 4_1 knot
         if self.id == 0:
@@ -188,8 +195,8 @@ class Special(Knot):
             if r_outer == None:
                 r_outer = 1
 
-            for bead in range(N):
-                t = 2 * np.pi * bead / N
+            for bead in range(self.N):
+                t = 2 * np.pi * bead / self.N
                 r = np.cos(2*t) + r_inner
                 self.coordinates[bead][0] = r_outer * (r * np.cos(3*t))
                 self.coordinates[bead][1] = r_outer * (r * np.sin(3*t))
@@ -197,8 +204,8 @@ class Special(Knot):
 
         # granny knot
         elif self.id == 1:
-            for bead in range(N):
-                t = 2 * np.pi * bead / N
+            for bead in range(self.N):
+                t = 2 * np.pi * bead / self.N
                 self.coordinates[bead][0] = (-22*np.cos(t) - 128*np.sin(t) - 44*np.cos(3*t) - 78*np.sin(3*t)) / 80
                 self.coordinates[bead][1] = (-10*np.cos(2*t) - 27*np.sin(2*t) + 38*np.cos(4*t) + 46*np.sin(4*t)) / 80
                 self.coordinates[bead][2] = (70*np.cos(3*t) - 40*np.sin(3*t)) / 100
