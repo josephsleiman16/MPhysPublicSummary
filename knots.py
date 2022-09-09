@@ -81,7 +81,7 @@ class Knot:
 class Torus(Knot):
     """Class to generate Torus knots
     """
-    def __init__(self, p: int = 3, q: int = 2, N: int = 100):
+    def __init__(self, p: int = 3, q: int = 2, N: int = 100, chirality: str = "right"):
         """Constructor of the Torus knot class
 
         Initialises the p and q integer values defining a Torus knot, as well as the number of coordinates to generate
@@ -89,12 +89,14 @@ class Torus(Knot):
         :param p (int): p-integer denoting the number of times the knot crosses the longitudinal direction (through the "hole")
         :param q (int): q-integer denoting the number of times the knot crosses the meridonial direction (revolutions)
         :param N (int): the number of coordinates to generate
+        :param chirality (str): the handedness of the torus knot (either left handed or right handed)
 
         """
-        Knot.__init__(self, name="(" + str(p) + "-" + str(q) + ")-Torus." + str(N))
+        Knot.__init__(self, name="(" + str(p) + "-" + str(q) + ")-Torus-" + chirality + "handed." + str(N))
         self.p = p
         self.q = q
         self.N = N
+        self.chirality = chirality
 
 
     def generate_coordinates(self, r_inner: float = None, r_outer: float = None) -> np.ndarray:
@@ -113,7 +115,10 @@ class Torus(Knot):
         if r_outer is None:
             r_outer = 1
 
-
+        if chirality == "left" or chirality == "Left" or chirality == "L" or chirality == "l":
+            self.p *= -1
+            self.q *= -1
+            
         for bead in range(self.N):
             t = 2 * np.pi * bead / self.N
             r = np.cos(self.q*t) + r_inner
