@@ -115,7 +115,7 @@ class Torus(Knot):
         if r_outer is None:
             r_outer = 1
 
-        if chirality == "left" or chirality == "Left" or chirality == "L" or chirality == "l":
+        if self.chirality == "left" or self.chirality == "Left" or self.chirality == "L" or self.chirality == "l":
             self.p *= -1
             self.q *= -1
             
